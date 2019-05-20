@@ -1,0 +1,21 @@
+﻿生成启动时间为 2019-03-25 16:41:54。
+     1>项目“C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\递归和非递归分别实现strlen\递归和非递归分别实现strlen.vcxproj”在节点 2 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在创建“Debug\递归和非递归分别实现strlen.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt "递归和非递归分别实现strlen.c"
+         递归和非递归分别实现strlen.c
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\Debug\递归和非递归分别实现strlen.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\递归和非递归分别实现strlen.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\Debug\递归和非递归分别实现strlen.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\Debug\递归和非递归分别实现strlen.lib" /MACHINE:X86 "Debug\递归和非递归分别实现strlen.obj"
+         LINK : 没有找到 C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\Debug\递归和非递归分别实现strlen.exe 或上一个增量链接没有生成它；正在执行完全链接
+         递归和非递归分别实现strlen.vcxproj -> C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\Debug\递归和非递归分别实现strlen.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\Debug\递归和非递归分别实现strlen.exe;#1" /manifest "Debug\递归和非递归分别实现strlen.exe.intermediate.manifest"
+       FinalizeBuildStatus:
+         正在删除文件“Debug\递归和非递归分别实现strlen.unsuccessfulbuild”。
+         正在对“Debug\递归和非递归分别实现strlen.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“C:\Users\lenovo\Desktop\比特科技\递归和非递归分别实现strlen\递归和非递归分别实现strlen\递归和非递归分别实现strlen.vcxproj”(build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:03.30

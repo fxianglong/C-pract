@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "判断一个数是不是素数", "判断一个数是不是素数\判断一个数是不是素数.vcxproj", "{003F2DC3-745D-49D1-9F79-1F4B95BA620E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{003F2DC3-745D-49D1-9F79-1F4B95BA620E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{003F2DC3-745D-49D1-9F79-1F4B95BA620E}.Debug|Win32.Build.0 = Debug|Win32
+		{003F2DC3-745D-49D1-9F79-1F4B95BA620E}.Release|Win32.ActiveCfg = Release|Win32
+		{003F2DC3-745D-49D1-9F79-1F4B95BA620E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
