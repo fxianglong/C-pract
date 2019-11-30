@@ -1,208 +1,111 @@
 //#include<iostream>
 //#include<string>
+//#include<algorithm>
 //using namespace std;
-//int Length(string s)
-//{
-//	int ret = s.size();
-//	if (ret <= 4)
-//		return 5;
-//	else if (ret >= 5 && ret <= 7)
-//		return 10;
-//	else return 25;
-//}
-//
 //int main()
 //{
 //	string s;
-//	while (getline(cin, s)){
-//		int sum = 0;
-//		sum += Length(s);
-//		bool f1 = false;
-//		bool f2 = false;
-//		bool f3 = false;
-//		bool f4 = false;
-//		int count1 = 0;
-//		int count2 = 0;
-//		for (unsigned int i = 0; i < s.length(); i++) {
-//			if (s[i] >= 'A'&&s[i] <= 'Z'){
-//				f1 = true;
-//			}
-//			else if (s[i] >= 'a'&&s[i] <= 'z'){
-//				f2 = true;
-//			}
-//			if (s[i] >= '0'&&s[i] <= '9'){
-//				f3 = true;
-//				//System.out.println(str.charAt(i));
-//				count1++;
-//			}
-//			if (!(s[i] >= '0'&&s[i] <= '9' || s[i] >= 'A'
-//				&&s[i] <= 'Z' || s[i] >= 'a'
-//				&&s[i] <= 'z')){
-//				f4 = true;
-//				count2++;
-//			}
-//		}
-//		if (f1&&f2){
-//			sum += 20;
-//		}
-//		else if (!f1&&!f2){
-//			sum += 0;
-//		}
-//		else {
-//			sum += 10;
-//		}
-//		//System.out.println(sum);
-//		if (count1 == 1){
-//			sum += 10;
-//		}
-//		else if (count1 > 1){
-//			sum += 20;
-//		}
-//		//System.out.println(sum);
-//		if (count2 == 1){
-//			sum += 10;
-//		}
-//		else if (count2 > 1){
-//			sum += 25;
-//		}
-//		//System.out.println(sum);
-//		if (f1&&f2&&f3&&f4){
-//			sum += 5;
-//		}
-//		else if (!f1&&f2&&f3&&f4 || f1&&!f2&&f3&&f4){
-//			sum += 3;
-//		}
-//		else if (!f1&&f2&&f3&&!f4 || f1&&!f2&&f3&&!f4){
-//			sum += 2;
-//		}
-//		//System.out.println("sum :"+sum);
-//		if (sum >= 90){
-//			cout << "VERY_SECURE" << endl;
-//		}
-//		else if (sum >= 80){
-//			cout << "SECURE" << endl;
-//		}
-//		else if (sum >= 70){
-//			cout << "VERY_STRONG" << endl;
-//		}
-//		else if (sum >= 60){
-//			cout << "STRONG" << endl;
-//		}
-//		else if (sum >= 50){
-//			cout << "AVERAGE" << endl;
-//		}
-//		else if (sum >= 25){
-//			cout << "WEAK" << endl;
-//		}
-//		else if (sum >= 0){
-//			cout << "VERY_WEAK" << endl;
-//		}
-//	}
+//	cin >> s;
+//	reverse(s.begin(),s.end());
+//	cout << s << endl;
 //	return 0;
 //}
 
-
 //#include<iostream>
+//#include<string>
 //using namespace std;
-//int main()
+//int getcommentlength(string s1, string s2)
 //{
-//	int n; 
-//	while (cin>>n)
+//	if (s1 > s2)
+//		swap(s1, s2);
+//	int count = 0;
+//	for (int i = 0; i < s1.size(); i++)
 //	{
-//		int max = 0; int sum = 0;
-//		while (n)
+//		int ret = 0;
+//		int j = 0;
+//		while (j<s2.size())
 //		{
-//			if (n % 2 == 1)
-//				sum += 1;
-//			else sum = 0;
-//			max = sum;
-//			n = n / 2;
-//		}
-//		cout << max << endl;
-//	}
-//	return 0;
-//}
-
-//#include<iostream>
-//using namespace std;
-//int main()
-//{
-//	int n;
-//	cin >> n;
-//	int max = 0; int count = 0;
-//	while (n)
-//	{
-//		while (n & 1 == 1){
-//			count++;
-//			n = n / 2;
-//		}
-//		max = count>max ? count : max;
-//		n = n >> 1;
-//	}
-//	cout << count << endl;
-//	system("pause");
-//	return 0;
-//}
-
-//#include<iostream>
-//using namespace std;
-//int main()
-//{
-//	int n;
-//	while (cin >> n){
-//		int count = 0; int max = 0;
-//		while (n)
-//		{
-//			while ((n & 1) == 1){
-//				count++;
-//				n = n / 2;
+//			int m = i;
+//			j = s2.find(s1[m], j);   //在s2中找s1的字母
+//			while (s1[m] == s2[j] && m<s1.size())   //如果找到，ret计数++，并继续查找
+//			{
+//				ret++;
+//				m++; j++;
 //			}
-//			max = (count>max ? count : max);
-//			n = n >> 1;
+//			if (ret>count)   //比较ret 与count，取较大的值
+//				count = ret;
+//			ret = 0;
 //		}
-//		cout << count << endl;
+//	}
+//	return count;
+//
+//}
+//int main()
+//{
+//	string s1, s2;
+//	cin >> s1;
+//	cin >> s2;
+//
+//	cout << getcommentlength(s1, s2) << endl;
+//	return 0;
+//}
+
+//#include<iostream>
+//#include<string>
+//using namespace std;
+//const int Tabsize = 256;
+//int hashtab[Tabsize];
+//int main(){
+//	string str;
+//	while (cin >> str){
+//		bool flg = false;
+//		for (int i = 0; i<Tabsize; ++i) {
+//			hashtab[i] = 0;
+//		}
+//		for (int i = 0; i<str.size(); ++i){
+//			hashtab[str[i]]++;
+//		}
+//		for (int i = 0; !flg && i<str.size(); ++i){
+//			if (hashtab[str[i]] == 1){
+//				cout << str[i] << endl;
+//				flg = true;
+//				break;
+//			}
+//		}
+//		if (!flg)
+//			cout << '-1' << endl;
 //	}
 //	return 0;
 //}
 
-#include<iostream>
+
+#include <iostream>
+#include "stdio.h"
+#include <vector>
 using namespace std;
-int max(int a, int b)
+int gcd(int m, int n)
 {
-	return a>b ? a : b;
-}
-int min(int a, int b)
-{
-	return a<b ? a : b;
-}
-int seekroot(int n)
-{
-	if (n % 2 == 0)
-		return n / 2;
+	if (n == 0)
+		return m;
 
-	else return (n - 1)/2;
-}
-int getLCA(int a, int b) {
-	if (a == b) return a;
-	int mx = max(a, b); int mn = min(a, b);
-	while (mn>1)
-	{
-		if (seekroot(mx) != mn)
-		{
-			int temp = seekroot(mx);
-			mx = max(seekroot(mx), mn);
-			mn = min(mn, temp);
-		}
-		else
-			return mn;
-	}
-	return 1;
+	int temp = m%n;
+	m = n;
+	n = temp;
+	return gcd(m, n);
 }
 int main()
 {
-	int a = 0, b = 0;
-	cin >> a >> b;
-	cout << getLCA(a, b) << endl;
-	system("pause");
+	int n, ans;
+	while (cin >> n >> ans)
+	{
+		while (n>0)
+		{
+			int cur;
+			cin >> cur;
+			ans = ans + ((ans<cur) ? gcd(cur, ans) : cur);
+			n--;
+		}
+		cout << ans << endl;
+	}
 	return 0;
 }
