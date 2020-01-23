@@ -210,7 +210,7 @@ void ShowFire(DWORD* pMem)   //pMem  什么指针  显存指针
 int main()
 {
 	//打开一个窗口！ 宽度1200 高度800  ,SHOWCONSOLE
-	initgraph(1200,1000);  //init初始化  graph图形界面
+	initgraph(1200,800);  //init初始化  graph图形界面
 	srand((unsigned int)time(NULL));
 
 	mciSendString(L"open 小幸运.mp3 alias music", 0, 0, 0);
