@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DDAB6AB9-A892-49AA-8B2D-5DA8F1EBB5D6}</ProjectGuid>
-    <RootNamespace>程序员面试宝典</RootNamespace>
+    <ProjectGuid>{A1791AAF-F276-4266-993F-FE60310F04EB}</ProjectGuid>
+    <RootNamespace>两棵树比较</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,7 +64,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="1千万条短信面试题.cpp" />
+    <ClCompile Include="比较树.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

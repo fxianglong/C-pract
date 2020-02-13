@@ -15,16 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="循环链表.cpp">
+    <ClCompile Include="比较树.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="队列.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="栈.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="两个栈实现一个队列.cpp">
+    <ClCompile Include="1千万条短信面试题.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
