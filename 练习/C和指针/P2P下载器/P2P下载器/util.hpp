@@ -17,7 +17,8 @@
 
 class FileUtil{
 public:
-	static bool Write(const std::string &name, const std::string &body, int64_t offset){
+	static bool Write(const std::string &name, const std::string &body, int64_t offset=0){
+
 		std::ofstream ofs(name);
 		if (ofs.is_open() == false){
 			std::cerr << "打开文件失败";
@@ -45,12 +46,12 @@ public:
 		int64_t filesize = boost::filesystem::file_size(name);
 		body->resize(filesize);
 		ifs.read(&(*body)[0], filesize);
-		if (ifs.good() == false)
+		/*if (ifs.good() == false)
 		{
 			std::cerr << "读取文件失败";
 			ifs.close();
 			return false;
-		}
+		}*/
 		ifs.close();
 		return true;
 	}

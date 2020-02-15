@@ -1,10 +1,12 @@
 #pragma once
 #include<thread>
+#include <memory>
 #include"util.hpp"
 #include"httplib.h"
 #define P2P_PORT 9000
 #define MAX_IPBUFFER 16
-#define SHARED_PATH "./sHARED"
+#define SHARED_PATH "./sHARED/"
+#define DOWNLOADPATH "./Download/"
 class Host{
 public:
 	uint32_t _ip_addr;
@@ -12,6 +14,12 @@ public:
 };
 class Client{
 public:
+	bool Start(){
+		while (1){
+			GetOnlineHost();
+		}
+		return true;
+	}
 	//主机配对的线程入口函数
 	void HostPair(Host *host)
 	{
@@ -30,42 +38,52 @@ public:
 	}
 	bool GetOnlineHost()//获取在线主机
 	{
-		//1.获取网卡信息，进而得到局域网中所有的IP地址列表
-		std::vector<Adapter> list;
-		AdapterUtil::GetAllAdapter(&list);
-		//获取所有主机序号
-		std::vector<Host> host_list;
-		for (int i = 0; i < list.size(); i++)
-		{
-			uint32_t ip = list[i]._ip_addr;
-			uint32_t mask = list[i]._mask_addr;
-			//计算网络号
-			uint32_t net = (ip & mask);
-			//计算机最大主机号
-			uint32_t max_host = (~ntohl(mask));//这个主机IP的计算应该使用小端主机号
-			
-			std::vector<bool> ret_list(max_host);
-			for (int j = 1; j < max_host; j++)//得到所有的主机IP地址列表
+		char ch='N';
+		if (!_online_host.empty()){
+			std::cout << "是否重新查看在线主机(Y/N)";
+			fflush(stdout);
+			std::cin >> ch;
+		}
+		if (ch == 'Y'){
+			std::cout << "开始主机匹配...\n";
+			//1.获取网卡信息，进而得到局域网中所有的IP地址列表
+			std::vector<Adapter> list;
+			AdapterUtil::GetAllAdapter(&list);
+			//获取所有主机序号
+			std::vector<Host> host_list;
+			for (int i = 0; i < list.size(); i++)
 			{
-				uint32_t host_ip = net + j;
-				Host host;
-				host._ip_addr = htonl(host_ip);//将主机字节序转换为字符串字节序
-				host._pair_ret = false;
-				host_list.push_back(host);
-			}
+				uint32_t ip = list[i]._ip_addr;
+				uint32_t mask = list[i]._mask_addr;
+				//计算网络号
+				uint32_t net = (ip & mask);
+				//计算机最大主机号
+				uint32_t max_host = (~ntohl(mask)-1);//这个主机IP的计算应该使用小端主机号
+
+				std::vector<bool> ret_list(max_host);
+				for (int j = 1; j < max_host; j++)//得到所有的主机IP地址列表
+				{
+					uint32_t host_ip = net + j;
+					Host host;
+					host._ip_addr = htonl(host_ip);//将主机字节序转换为字符串字节序
+					host._pair_ret = false;
+					host_list.push_back(host);
+				}
 				//2.逐个对IP地址列表中的主机发送配对请求
-		}
-		std::vector<std::thread*> thr_list(host_list.size());
-		for (int i = 0; i < host_list.size(); i++){
-			thr_list[i] = new std::thread(&Client::HostPair, this, &host_list[i]);
-		}
-		for (int i = 0; i < host_list.size(); i++)
-		{
-			thr_list[i]->join();
-			if (host_list[i]._pair_ret == true){
-				_online_host.push_back(host_list[i]);
 			}
-			delete thr_list[i];
+			std::vector<std::thread*> thr_list(host_list.size());
+			for (int i = 0; i < host_list.size(); i++){
+				thr_list[i] = new std::thread(&Client::HostPair, this, &host_list[i]);
+			}
+			std::cout << "正在主机匹配中，请稍后" << std::endl;
+			for (int i = 0; i < host_list.size(); i++)
+			{
+				thr_list[i]->join();
+				if (host_list[i]._pair_ret == true){
+					_online_host.push_back(host_list[i]);
+				}
+				delete thr_list[i];
+			}
 		}
 		for (int i = 0; i < _online_host.size(); i++)
 		{
@@ -80,14 +98,14 @@ public:
 		std::string select_ip;
 		std::cin >> select_ip;
 		GetShareList(select_ip);
-
+		return true;
 	}
 	bool GetShareList(const std::string &host_ip)//获取文件列表
 	{
 		//向服务器发送一个文件列表获取请求
 		//1.先发送请求
 		//2.得到响应之后解析正文
-		httplib::Client cli(host_ip ,P2P_PORT);
+		httplib::Client cli(host_ip.c_str() ,P2P_PORT);
 		auto rsp = cli.Get("/liat");
 		if (rsp == NULL || rsp->status != 200)
 		{
@@ -99,7 +117,7 @@ public:
 		fflush(stdout);
 		std::string filename;
 		std::cin >> filename;
-		DownloadFile(host_ip,filename);
+		DownloadFile(host_ip.c_str(),filename);
 		return true;
 	}
 	bool DownloadFile(const std::string &host_ip,const std::string &filename)//下载文件
@@ -108,13 +126,18 @@ public:
 		//2.得到响应结果，响应结果中的Body正文就是文件数据
 
 		std::string req_path = "/download/" + filename;
-		httplib::Client cli(host_ip, P2P_PORT);
-		auto rsp = cli.Get(req_path);
-		if (rsp == NULL || rsp.status != 200){
+		httplib::Client cli(host_ip.c_str(), P2P_PORT);
+		std::cout << "向服务端发送文件下载请求" << req_path << std::endl;
+		auto rsp = cli.Get(req_path.c_str());
+		if (rsp == NULL || rsp->status !=200){
 			std::cerr << "下载文件，获取响应信息失败\n";
 			return false;
 		}
-		if (FileUtil::Write(filename, rsp->body) == false){
+		if (boost::filesystem::exists(DOWNLOADPATH)){
+			boost::filesystem::create_directory(DOWNLOADPATH);
+		}
+		std::string realpath = DOWNLOADPATH + filename;
+		if (FileUtil::Write(realpath, rsp->body) == false){
 			std::cerr << "文件下载失败\n";
 			return false;
 		}
@@ -134,12 +157,15 @@ public:
 		return true;
 }
 private:
-	static bool HostPair(const httplib::Request &req,httplib::Response &rsp){
+	static void HostPair(const httplib::Request &req,httplib::Response &rsp){
 		rsp.status = 200;
 		return;
 	}
 	//获取共享文件列表--在主机上设置一个共享目录
-	static bool ShareList(const httplib::Request &req, httplib::Response &rsp){
+	static void ShareList(const httplib::Request &req, httplib::Response &rsp){
+		if (boost::filesystem::exists(SHARED_PATH)){
+			boost::filesystem::create_directory(SHARED_PATH);
+		}
 		boost::filesystem::directory_iterator begin(SHARED_PATH);//实例化目录迭代器
 		boost::filesystem::directory_iterator end;
 		//开始迭代目录
@@ -148,19 +174,19 @@ private:
 				//当前版本我们只获取普通文件名称，不做多层级目录的操作
 				continue;
 			}
-			std::string name = begin->path().string();
+			std::string name = begin->path().filename().string();
 			rsp.body += name + "\r\n";
 		}
 		rsp.status = 200;
 		return;
 	}
-	static bool Download(const httplib::Request &req, httplib::Response &rsp){
+	static void Download(const httplib::Request &req, httplib::Response &rsp){
 		boost::filesystem::path req_path(req.path);
 		std::string name = req_path.filename().string();
-		std::string realpath = SHARED_PATH + '/' + name;//实际文件的路径应该是在共享文件的目录下
+		std::string realpath = SHARED_PATH + name;//实际文件的路径应该是在共享文件的目录下
 		if (!boost::filesystem::exists(realpath) || boost::filesystem::is_directory(realpath)){
 			rsp.status = 404;
-			return;
+			return ;
 		}
 		if (FileUtil::Read(name, &rsp.body) == false){
 			rsp.status = 500;
