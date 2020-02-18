@@ -24,7 +24,7 @@ public:
 			std::cerr << "打开文件失败";
 			return false;
 		}
-		ofs.seekp(offset, std::ios::beg);
+		ofs.seekp(offset, std::ios::beg);//读写位置跳转到相对于文件起始位置开始偏移offset的偏移量
 		ofs.write(&body[0], body.size());
 		if (ofs.good() == false){
 				std::cerr << "向文件写入数据失败\n";
@@ -88,11 +88,11 @@ public:
 			if (adapter._ip_addr != 0)//因为有些网卡并没有启用
 			{
 				list->push_back(adapter);//将网卡信息添加到vector
-				std::cout << "网卡名称" << p_adapters->AdapterName << std::endl;
+				/*std::cout << "网卡名称" << p_adapters->AdapterName << std::endl;
 				std::cout << "网卡描述" << p_adapters->Description << std::endl;
 				std::cout << "网卡IP地址" << p_adapters->IpAddressList.IpAddress.String << std::endl;
 				std::cout << "子网掩码" << p_adapters->IpAddressList.IpMask.String << std::endl;
-				std::cout << std::endl;
+				std::cout << std::endl;*/
 			}
 			p_adapters = p_adapters->Next;
 

@@ -1,3 +1,4 @@
+#include<boost/filesystem.hpp>
 #include"client.hpp"
 #include"util.hpp"
 #include"httplib.h"
@@ -24,13 +25,16 @@
 //}
 void ClientRun()
 {
-	Sleep(1);
 	Client cli;
 	cli.Start();
 }
 int main(int argc,char*argv[])
 {
-	std::thread thr_client(ClientRun);
+	//在主线程中要运行客户端模块以及服务端模块
+	//创建于一个县城运行客户端模块，主线程运行服务端模块
+
+	std::thread thr_client(ClientRun);//若客户端运行的时候，服务端还没有启动
+
 	Sever srv;
 	srv.Start();
 	return 0; 

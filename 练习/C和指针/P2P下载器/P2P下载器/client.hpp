@@ -38,7 +38,7 @@ public:
 	}
 	bool GetOnlineHost()//获取在线主机
 	{
-		char ch='N';
+		char ch='Y';
 		if (!_online_host.empty()){
 			std::cout << "是否重新查看在线主机(Y/N)";
 			fflush(stdout);
@@ -51,6 +51,7 @@ public:
 			AdapterUtil::GetAllAdapter(&list);
 			//获取所有主机序号
 			std::vector<Host> host_list;
+			
 			for (int i = 0; i < list.size(); i++)
 			{
 				uint32_t ip = list[i]._ip_addr;
@@ -58,10 +59,10 @@ public:
 				//计算网络号
 				uint32_t net = (ip & mask);
 				//计算机最大主机号
-				uint32_t max_host = (~ntohl(mask)-1);//这个主机IP的计算应该使用小端主机号
+				uint32_t max_host = (~ntohl(mask));//这个主机IP的计算应该使用小端主机号
 
-				std::vector<bool> ret_list(max_host);
-				for (int j = 1; j < max_host; j++)//得到所有的主机IP地址列表
+				
+				for (int j = 1; j < (int32_t)max_host; j++)//得到所有的主机IP地址列表
 				{
 					uint32_t host_ip = net + j;
 					Host host;
@@ -71,11 +72,13 @@ public:
 				}
 				//2.逐个对IP地址列表中的主机发送配对请求
 			}
+			//std::vector<bool> ret_list(max_host);
 			std::vector<std::thread*> thr_list(host_list.size());
 			for (int i = 0; i < host_list.size(); i++){
 				thr_list[i] = new std::thread(&Client::HostPair, this, &host_list[i]);
 			}
-			std::cout << "正在主机匹配中，请稍后" << std::endl;
+			
+			//等待所有线程主机配对完毕，判断配对结果，将在线主机添加到online_host中
 			for (int i = 0; i < host_list.size(); i++)
 			{
 				thr_list[i]->join();
@@ -85,6 +88,7 @@ public:
 				delete thr_list[i];
 			}
 		}
+		//将所有在线主机的IP打印出来，供用户选择
 		for (int i = 0; i < _online_host.size(); i++)
 		{
 			char buf[MAX_IPBUFFER] = { 0 };
@@ -97,16 +101,18 @@ public:
 		fflush(stdout);
 		std::string select_ip;
 		std::cin >> select_ip;
-		GetShareList(select_ip);
+		GetShareList(select_ip);//用户选择主机后，调用获取文件列表接口
 		return true;
 	}
+
+	//获取文件列表
 	bool GetShareList(const std::string &host_ip)//获取文件列表
 	{
 		//向服务器发送一个文件列表获取请求
 		//1.先发送请求
 		//2.得到响应之后解析正文
 		httplib::Client cli(host_ip.c_str() ,P2P_PORT);
-		auto rsp = cli.Get("/liat");
+		auto rsp = cli.Get("/list");
 		if (rsp == NULL || rsp->status != 200)
 		{
 			std::cerr << "获取文件列表错误";
@@ -124,20 +130,17 @@ public:
 	{
 		//1.向服务端发送文件下载请求
 		//2.得到响应结果，响应结果中的Body正文就是文件数据
-
+		//3.创建文件，将文件数据写入文件中
 		std::string req_path = "/download/" + filename;
 		httplib::Client cli(host_ip.c_str(), P2P_PORT);
-		std::cout << "向服务端发送文件下载请求" << req_path << std::endl;
+
 		auto rsp = cli.Get(req_path.c_str());
 		if (rsp == NULL || rsp->status !=200){
 			std::cerr << "下载文件，获取响应信息失败\n";
 			return false;
 		}
-		if (boost::filesystem::exists(DOWNLOADPATH)){
-			boost::filesystem::create_directory(DOWNLOADPATH);
-		}
-		std::string realpath = DOWNLOADPATH + filename;
-		if (FileUtil::Write(realpath, rsp->body) == false){
+
+		if (FileUtil::Write(filename, rsp->body) == false){
 			std::cerr << "文件下载失败\n";
 			return false;
 		}
@@ -161,7 +164,7 @@ private:
 		rsp.status = 200;
 		return;
 	}
-	//获取共享文件列表--在主机上设置一个共享目录
+	//获取共享文件列表--在主机上设置一个共享目录,凡是在这个目录中的文件都是要分享给别人的
 	static void ShareList(const httplib::Request &req, httplib::Response &rsp){
 		if (boost::filesystem::exists(SHARED_PATH)){
 			boost::filesystem::create_directory(SHARED_PATH);
