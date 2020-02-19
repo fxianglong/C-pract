@@ -9,8 +9,8 @@
 #include<boost/filesystem.hpp>
 #include<WS2tcpip.h>
 #include<IPHlpApi.h>//获取网卡信息接口的头文件
-#pragma comment(lib,"Iphlpapi.lib")//获取网卡信息的库
-#pragma comment(lib,"ws2_32.lib")
+#pragma comment(lib,"Iphlpapi.lib")//获取网卡信息的库文件包含
+#pragma comment(lib,"ws2_32.lib")//Socket库
 #else
 //Linux头文件
 #endif
@@ -68,10 +68,11 @@ class AdapterUtil
 #ifdef _WIN32//windows下的获取网卡信息的借口
 public:
 	static bool GetAllAdapter(std::vector<Adapter> *list){
-		//PIP_ADAPTER_INFO存放网卡信息
+		//IP_ADAPTER_INFO存放网卡信息的结构体
 		PIP_ADAPTER_INFO p_adapters = new IP_ADAPTER_INFO();//开辟一块网卡信息结构的空间
 		//获取网卡信息可能会失败，因为空间不足，因此有一个输出型参数
 		uint64_t all_adapter_size = sizeof(p_adapters);
+		//用于获取所有网卡信息字节大小
 		int ret = GetAdaptersInfo(p_adapters, (PULONG)&all_adapter_size);
 		if (ret == ERROR_BUFFER_OVERFLOW){//缓冲区内存不足
 			delete p_adapters;
@@ -83,16 +84,16 @@ public:
 			Adapter adapter;
 			inet_pton(AF_INET, p_adapters->IpAddressList.IpAddress.String,&adapter._ip_addr);//将一个字符串点分十进制的IP地址转换为网络字节序的IP地址
 			inet_pton(AF_INET, p_adapters->IpAddressList.IpMask.String, &adapter._ip_addr);
-			adapter._ip_addr = inet_addr(p_adapters->IpAddressList.IpAddress.String);
-			adapter._mask_addr = inet_addr(p_adapters->IpAddressList.IpMask.String);
+			//adapter._ip_addr = inet_addr(p_adapters->IpAddressList.IpAddress.String);
+			//adapter._mask_addr = inet_addr(p_adapters->IpAddressList.IpMask.String);
 			if (adapter._ip_addr != 0)//因为有些网卡并没有启用
 			{
 				list->push_back(adapter);//将网卡信息添加到vector
-				/*std::cout << "网卡名称" << p_adapters->AdapterName << std::endl;
+				std::cout << "网卡名称" << p_adapters->AdapterName << std::endl;
 				std::cout << "网卡描述" << p_adapters->Description << std::endl;
 				std::cout << "网卡IP地址" << p_adapters->IpAddressList.IpAddress.String << std::endl;
 				std::cout << "子网掩码" << p_adapters->IpAddressList.IpMask.String << std::endl;
-				std::cout << std::endl;*/
+				std::cout << std::endl;
 			}
 			p_adapters = p_adapters->Next;
 

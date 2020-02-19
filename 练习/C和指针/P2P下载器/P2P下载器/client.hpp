@@ -49,8 +49,10 @@ public:
 			//1.获取网卡信息，进而得到局域网中所有的IP地址列表
 			std::vector<Adapter> list;
 			AdapterUtil::GetAllAdapter(&list);
-			//获取所有主机序号
+			//获取所有主机IP地址，
 			std::vector<Host> host_list;
+			//获取所有主机序号
+			
 			
 			for (int i = 0; i < list.size(); i++)
 			{
@@ -72,23 +74,23 @@ public:
 				}
 				//2.逐个对IP地址列表中的主机发送配对请求
 			}
-			//std::vector<bool> ret_list(max_host);
+
 			std::vector<std::thread*> thr_list(host_list.size());
 			for (int i = 0; i < host_list.size(); i++){
 				thr_list[i] = new std::thread(&Client::HostPair, this, &host_list[i]);
 			}
-			
 			//等待所有线程主机配对完毕，判断配对结果，将在线主机添加到online_host中
 			for (int i = 0; i < host_list.size(); i++)
 			{
-				thr_list[i]->join();
+				thr_list[i]->join();//等待一个线程退出
 				if (host_list[i]._pair_ret == true){
 					_online_host.push_back(host_list[i]);
-				}
+				} 
 				delete thr_list[i];
 			}
 		}
 		//将所有在线主机的IP打印出来，供用户选择
+
 		for (int i = 0; i < _online_host.size(); i++)
 		{
 			char buf[MAX_IPBUFFER] = { 0 };
@@ -97,7 +99,7 @@ public:
 		}
 		//3.若配对请求得到响应，则对应主机位在线主机，则将IP添加到_online_host列表中
 		//4.打印在线主机列表，使用户选择
-		std::cout << "请用户配对主机，获取共享文件列表";
+		std::cout << "请选择配对主机，获取共享文件列表";
 		fflush(stdout);
 		std::string select_ip;
 		std::cin >> select_ip;
