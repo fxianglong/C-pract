@@ -12,7 +12,12 @@
 #include<cassert>
 #include<unistd.h>
 #define CHECK_RET(q) if((q)==false){return -1;}
-#define MAX_LISTEN 100
+#define MAX_LISTEN 10
+typedef struct{
+	int num1;int num2;char op;
+}cal_tmp;
+
+
 class TcpSocket{
 private:
 	int _sockfd;
@@ -26,6 +31,9 @@ private:
 public:
 	TcpSocket():_sockfd(-1){}
 	//1.创建套接字
+	int GetFd(){
+		return _sockfd;
+	}
 	bool Socket(){
 		_sockfd = socket(AF_INET,SOCK_STREAM,0);
 		if(_sockfd<0){

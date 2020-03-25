@@ -17,7 +17,7 @@ int main(int argc,char* argv[])
 			fflush(stdout);
 			std::string buf;
 			std::cin>>buf;
-			CHECK_RET(cli_sock.Recv(buf));
+			CHECK_RET(cli_sock.Send(buf));
 
 			buf.clear();
 			CHECK_RET(cli_sock.Recv(buf));
