@@ -99,7 +99,7 @@ struct RBTreeIterator
 	}
 };
 
-template<class K, class T, class KeyOfValue>
+template<class K, class T>
 class RBTree{
 	typedef RBTreeNode<T> Node;
 public:
@@ -146,16 +146,15 @@ public:
 			return make_pair(iterator(_root), true);
 		}
 		//寻找位置
-		KeyOfValue kov;
 		Node* parent = nullptr;
 		Node* cur = _root;
 		while (cur)
 		{
-			if (kov(cur->_data) < kov(val)){
+			if (cur->_data < val){
 				parent = cur;
 				cur = cur->_pRight;
 			}
-			else if (kov(cur->_data) > kov(val)){
+			else if (cur->_data > val){
 				parent = cur;
 				cur = cur->_pLeft;
 			}
@@ -168,7 +167,7 @@ public:
 		Node* newnode = cur;
 		cur->_color = RED;
 		//插入适当位置
-		if (kov(parent->_data) < kov(val)){
+		if (parent->_data < val){
 			parent->_pRight = cur;
 			cur->_pParent = parent;
 		}
@@ -178,7 +177,7 @@ public:
 		}
 		//变色处理
 		//父节点为红色节点
-		while (parent && parent->_pParent == RED){
+		while (parent && parent->_color == RED){
 			Node* grandfather = parent->_pParent;
 			//父亲是祖父节点左孩子
 			if (parent == grandfather->_pLeft){
@@ -208,7 +207,7 @@ public:
 			}
 			//父亲节点是祖父节点右孩子
 			else{
-				Node* uncle = grandfather->_left;
+				Node* uncle = grandfather->_pLeft;
 				if (uncle && uncle->_color == RED){
 					parent->_color = BLACK;
 					uncle->_color = BLACK;
@@ -374,7 +373,7 @@ public:
 			return;
 
 		_InOrder(root->_pLeft);
-		cout << root->_data.first << " ";
+		cout << root->_data << " ";
 		_InOrder(root->_pRight);
 	}
 
@@ -388,7 +387,7 @@ void TestRBtree(){
 	//int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14, };
  
 	for (auto e : a){
-		t.Insert(make_pair(e, e));
+		t.Insert(e);
 	}
  
 	t.InOrder();
