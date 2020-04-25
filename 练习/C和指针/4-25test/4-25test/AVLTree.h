@@ -3,26 +3,26 @@
 #include<assert.h>
 using namespace std;
 
-template<class K,class V>
+template<class K, class V>
 struct AVLTreeNode
 {
-	pair<K,V> _val;
+	pair<K, V> _val;
 	AVLTreeNode<K, V>* _pLeft;
 	AVLTreeNode<K, V>* _pRight;
 	AVLTreeNode<K, V>* _pParent;
 	int _bf;
-	AVLTree(const T& val)
+	AVLTreeNode(const pair<K,V>& val)
 		:_val(val)
-		, _Left(nullptr)
-		, _Right(nullptr)
+		, _pLeft(nullptr)
+		, _pRight(nullptr)
 		, _pParent(nullptr)
 		, _bf(0)
 	{}
 };
 
-template<class K,class V>
+template<class K, class V>
 class AVLTree{
-	typedef AVLTreeNode Node;
+	typedef AVLTreeNode<K,V> Node;
 public:
 	bool Insert(const pair<K, V> kv)
 	{
@@ -44,7 +44,7 @@ public:
 			else if (cur->_val.first < kv.first)
 			{
 				Parent = cur;
-				cur=cur->_pRight
+				cur = cur->_pRight;
 			}
 			else
 			{
@@ -72,27 +72,27 @@ public:
 			}
 			if (Parent->_bf == 0)
 				break;
-			else if (abs(Parent->_bf)==1)
+			else if (abs(Parent->_bf) == 1)
 			{
 				cur = Parent;
 				Parent = Parent->_pParent;
 			}
 			else if (abs(Parent->_bf) == 2)
 			{
-				if (parent->_bf == 2){
+				if (Parent->_bf == 2){
 					if (cur->_bf == 1){
-						RotateL(parent);
+						RotateL(Parent);
 					}
 					else if (cur->_bf == -1){
-						RotateRL(parent);
+						RotateRL(Parent);
 					}
 				}
-				else if (parent->_bf == -2){
+				else if (Parent->_bf == -2){
 					if (cur->_bf == -1){
-						RotateR(parent);
+						RotateR(Parent);
 					}
 					else if (cur->_bf == 1){
-						RotateLR(parent);
+						RotateLR(Parent);
 					}
 				}
 				break;
@@ -139,31 +139,31 @@ public:
 	//右单选
 	void RotateR(Node* parent)
 	{
-		Node* subL = parent->_left;		//左孩子
-		Node* subLR = subL->_right;		//左孩子的右孩子
+		Node* subL = parent->_pLeft;		//左孩子
+		Node* subLR = subL->_pRight;		//左孩子的右孩子
 
-		parent->_left = subLR;
+		parent->_pLeft = subLR;
 		if (subLR)
-			subLR->_parent = parent;
+			subLR->_pParent = parent;
 
-		subL->_right = parent;
+		subL->_pRight = parent;
 
-		Node* ppNode = parent->_parent;		//parent结点还有祖先结点
-		parent->_parent = subL;
+		Node* ppNode = parent->_pParent;		//parent结点还有祖先结点
+		parent->_pParent = subL;
 
 		if (ppNode == nullptr){		//parent就是原树的根
 			_root = subL;
-			_root->_parent = nullptr;
+			_root->_pParent = nullptr;
 		}
 		else{
-			if (ppNode->_left == parent){
-				ppNode->_left = subL;
+			if (ppNode->_pLeft == parent){
+				ppNode->_pLeft = subL;
 			}
 			else{
-				ppNode->_right = subL;
+				ppNode->_pRight = subL;
 			}
 
-			subL->_parent = ppNode;
+			subL->_pParent = ppNode;
 		}
 		parent->_bf = subL->_bf = 0;
 	}
@@ -171,11 +171,11 @@ public:
 	//右左双旋
 	void RotateRL(Node* parent)
 	{
-		Node* subR = parent->_right;
-		Node* subRL = subR->_left;
+		Node* subR = parent->_pRight;
+		Node* subRL = subR->_pLeft;
 		int bf = subRL->_bf;	//保存subRL的平衡因子，因为在下面两行会置 0
 
-		RotateR(parent->_right);
+		RotateR(parent->_pRight);
 		RotateL(parent);
 
 		if (bf == 0){
@@ -195,7 +195,7 @@ public:
 	//左右双选
 	void RotateLR(Node* parent)
 	{
-		RotateL(parent->_left);
+		RotateL(parent->_pLeft);
 		RotateR(parent);
 	}
 
@@ -208,9 +208,9 @@ public:
 		if (root == nullptr)
 			return;
 
-		_InOrder(root->_left);
-		cout << root->_kv.first << " ";
-		_InOrder(root->_right);
+		_InOrder(root->_pLeft);
+		cout << root->_val.first << " ";
+		_InOrder(root->_pRight);
 	}
 
 
@@ -219,12 +219,12 @@ public:
 			return 0;
 		}
 
-		int leftheight = _Height(root->_left);
-		int rightheight = _Height(root->_right);
+		int leftheight = _Height(root->_pLeft);
+		int rightheight = _Height(root->_pRight);
 
 		return leftheight > rightheight ? leftheight + 1 : rightheight + 1;
 	}
-	
+
 	bool IsBalance(){		//this指针是隐含的，所以需要封装
 		return _IsBalance(_root);
 	}
@@ -233,16 +233,16 @@ public:
 		if (root == nullptr)
 			return true;
 
-		int leftheight = _Height(root->_left);
-		int rightheight = _Height(root->_right);
+		int leftheight = _Height(root->_pLeft);
+		int rightheight = _Height(root->_pRight);
 		if (rightheight - leftheight != root->_bf){
-			cout << root->_kv.first << "平衡因子异常" << endl;
+			cout << root->_val.first << "平衡因子异常" << endl;
 			return false;
 		}
 
 		return abs(leftheight - rightheight) < 2
-			&& _IsBalance(root->_left)
-			&& _IsBalance(root->_right);
+			&& _IsBalance(root->_pLeft)
+			&& _IsBalance(root->_pRight);
 	}
 
 private:
