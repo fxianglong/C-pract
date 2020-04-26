@@ -1,8 +1,9 @@
 #include"AVLTree.h"
-
+#include"RBTree.h"
 int main()
 {
-	TestAVLTree();
+//	TestAVLTree();
+	TestRBtree();
 	system("pause");
 	return 0;
 }
