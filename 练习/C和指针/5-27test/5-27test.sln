@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3-15test", "3-15test\3-15test.vcxproj", "{EFA2DBCB-8123-45AC-BB4B-7A0F529D8881}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-27test", "5-27test\5-27test.vcxproj", "{D13925E3-2A93-41EB-938D-D9B1C52144E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|X64 = Release|X64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EFA2DBCB-8123-45AC-BB4B-7A0F529D8881}.Debug|X64.ActiveCfg = Debug|X64
-		{EFA2DBCB-8123-45AC-BB4B-7A0F529D8881}.Debug|X64.Build.0 = Debug|X64
-		{EFA2DBCB-8123-45AC-BB4B-7A0F529D8881}.Release|X64.ActiveCfg = Release|X64
-		{EFA2DBCB-8123-45AC-BB4B-7A0F529D8881}.Release|X64.Build.0 = Release|X64
+		{D13925E3-2A93-41EB-938D-D9B1C52144E8}.Debug|X64.ActiveCfg = Debug|X64
+		{D13925E3-2A93-41EB-938D-D9B1C52144E8}.Debug|X64.Build.0 = Debug|X64
+		{D13925E3-2A93-41EB-938D-D9B1C52144E8}.Release|X64.ActiveCfg = Release|X64
+		{D13925E3-2A93-41EB-938D-D9B1C52144E8}.Release|X64.Build.0 = Release|X64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
