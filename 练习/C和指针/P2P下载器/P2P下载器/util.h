@@ -8,7 +8,6 @@
 #include<vector>
 #include<stdint.h>
 #pragma comment(lib, "Iphlpapi.lib")
-#pragma comment(lib,"I")
 
 #else
 //LinuxÍ·ÎÄ¼ş
